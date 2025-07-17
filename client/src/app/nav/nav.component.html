@@ -1,10 +1,11 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <div class="container"> <a class="navbar-brand" href="#">Dating App</a>
+    <div class="container"> <a class="navbar-brand" routerLink='/' routerLinkActive="active">Dating App</a>
 
         <ul class="navbar-nav me-auto mb-2 mb-md-0" *ngIf="accountService.currentUser$| async">
-            <li class="nav-item"> <a class="nav-link" href="#">Ghép đôi</a> </li>
-            <li class="nav-item"> <a class="nav-link" href="#">Yêu thích</a> </li>
-            <li class="nav-item"> <a class="nav-link" href="#">Tin nhắn</a> </li>
+            <li class="nav-item"> <a class="nav-link" routerLink='/members' routerLinkActive="active">Ghép đôi</a> </li>
+            <li class="nav-item"> <a class="nav-link" routerLink='/lists' routerLinkActive="active">Yêu thích</a> </li>
+            <li class="nav-item"> <a class="nav-link" routerLink='/messages' routerLinkActive="active">Tin nhắn</a>
+            </li>
         </ul>
         <div class="dropdown" dropdown *ngIf="accountService.currentUser$| async">
             <a class="dropdown-toggle text-light" dropdownToggle>Chào, Username</a>
