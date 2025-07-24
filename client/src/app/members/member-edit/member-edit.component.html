@@ -1,0 +1,65 @@
+<div class="row" *ngIf="member">
+    <div class="col-4">
+        <h1>Hồ sơ của bạn</h1>
+    </div>
+    <div class="col-8">
+        <div class="alert alert-info" *ngIf="editForm.dirty">
+            <p><strong>Thông báo: </strong> Bạn đã thay đổi thông tin. Mọi thay đổi chưa lưu sẽ bị mất.</p>
+        </div>
+    </div>
+
+    <div class="col-4">
+        <div class="card">
+            <img src="{{ member.photoUrl || './assets/user.png' }}" alt="{{ member.knownAs }}"
+                class="card-img-top img-thumbnail" />
+            <div class="card-body">
+                <div class="d-flex">
+                    <strong class="me-1">Vị trí:</strong>
+                    <p class="mb-0">{{ member.city }}, {{ member.country }}</p>
+                </div>
+                <div class="d-flex">
+                    <strong class="me-1">Tuổi:</strong>
+                    <p class="mb-0">{{ member.age }}</p>
+                </div>
+                <div class="d-flex">
+                    <strong class="me-1">Thành viên từ:</strong>
+                    <p class="mb-0">{{ member.created | date: 'dd/MM/yyyy' }}</p>
+                </div>
+                <div class="d-flex">
+                    <strong class="me-1">Hoạt động:</strong>
+                    <p class="mb-0">{{ member.lastActive | date: 'short' }}</p>
+                </div>
+            </div>
+            <div class="card-footer">
+
+                <button [disabled]="!editForm.dirty" form="editForm" type="submit" class="btn btn-success btn-block">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-8">
+        <tabset class="member-tabset">
+            <tab heading="Thông tin {{member.knownAs}}">
+                <form #editForm="ngForm" id="editForm" (ngSubmit)="updateMember()">
+                    <h4>Mô tả</h4>
+                    <textarea class="form-control" [(ngModel)]="member.introduction" name="introduction" rows="5"></textarea>
+                    <h4 class="mt-2">Đang tìm kiếm</h4>
+                    <textarea class="form-control" [(ngModel)]="member.lookingFor" name="lookingFor" rows="5"></textarea>
+                    <h4 class="mt-2">Sở thích</h4>
+                    <textarea class="form-control" [(ngModel)]="member.interests" name="lookingFor" rows="5"></textarea>
+                    <h4 class="mt-2">Chi tiết địa điểm:</h4>
+                    <div class="form-inline">
+                        <label for="city">Thành phố:</label>
+                        <input [(ngModel)]="member.city" type="text" name="city" class="form-control mx-2">
+                        <label for="country">Quốc gia:</label>
+                        <input [(ngModel)]="member.country" type="text" name="country" class="form-control mx-2">
+                    </div>
+                </form>
+
+            </tab>
+            <tab heading="Chỉnh sửa ảnh">
+                <p>Chỉnh ảnh ở đây</p>
+            </tab>
+
+        </tabset>
+    </div>
+</div>

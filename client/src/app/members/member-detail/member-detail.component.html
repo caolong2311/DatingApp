@@ -1,1 +1,57 @@
-<p>member-detail works!</p>
+<div class="row" *ngIf="member">
+    <div class="col-4">
+        <div class="card">
+            <img src="{{ member.photoUrl || './assets/user.png' }}" alt="{{ member.knownAs }}"
+                class="card-img-top img-thumbnail" />
+            <div class="card-body">
+                <div class="d-flex">
+                    <strong class="me-1">Vị trí:</strong>
+                    <p class="mb-0">{{ member.city }}, {{ member.country }}</p>
+                </div>
+                <div class="d-flex">
+                    <strong class="me-1">Tuổi:</strong>
+                    <p class="mb-0">{{ member.age }}</p>
+                </div>
+                <div class="d-flex">
+                    <strong class="me-1">Thành viên từ:</strong>
+                    <p class="mb-0">{{ member.created | date: 'dd/MM/yyyy' }}</p>
+                </div>
+                <div class="d-flex">
+                    <strong class="me-1">Hoạt động:</strong>
+                    <p class="mb-0">{{ member.lastActive | date: 'short' }}</p>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group d-flex">
+                    <button class="btn btn-primary">Theo dõi</button>
+                    <button class="btn btn-success">Nhắn tin</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-8">
+        <tabset class="member-tabset">
+            <tab heading="Thông tin {{member.knownAs}}">
+                <h4>Mô tả</h4>
+                <p>{{member.introduction}}</p>
+                <h4>Đang tìm kiếm</h4>
+                <p>{{member.lookingFor}}</p>
+            </tab>
+            <tab heading="Sở thích">
+                <h4>Sở thích</h4>
+                <p>{{member.interests}}</p>
+            </tab>
+            <tab heading="Ảnh">
+                <ng-image-slider [images]="imageObject" [showArrow]="true" [infinite]="true" [imageSize]="'contain'"
+                    [slideImage]="1" [showThumbImage]="true" [thumbnailSize]="'small'" [imagePopup]="true"
+                    [autoSlide]="false" [arrowKeyMove]="true" [showImage]="true" [thumbnailHeight]="70"
+                    [thumbnailWidth]="70" [imageHeight]="400"></ng-image-slider>
+            </tab>
+
+
+            <tab heading="Tin nhắn">
+                <p>Tin nhắn sẽ hiện ở đây</p>
+            </tab>
+        </tabset>
+    </div>
+</div>

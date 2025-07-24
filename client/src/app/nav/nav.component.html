@@ -20,7 +20,7 @@
       <div class="dropdown" dropdown>
         <a class="dropdown-toggle text-light" dropdownToggle>Chào, {{ user.username | titlecase}}</a>
         <ul class="dropdown-menu mt-3" *dropdownMenu>
-          <li><a class="dropdown-item">Thông tin</a></li>
+          <li><a routerLink="member/edit" class="dropdown-item">Thông tin</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" (click)="logout()">Đăng xuất</a></li>
         </ul>

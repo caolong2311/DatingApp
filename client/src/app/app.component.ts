@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavComponent } from './nav/nav.component';
 import { AccountService } from './_services/account.service';
@@ -17,12 +17,20 @@ import { User } from './_models/user';
 export class AppComponent implements OnInit {
   title = 'Dating app';
   users: any;
-  constructor(private accountService: AccountService) { }
+  constructor(private accountService: AccountService, private router: Router) { }
   ngOnInit() {
-    this.setCurrenUser();
+    this.setCurrentUser();
   }
-  setCurrenUser(){
-    const user: User = JSON.parse(localStorage.getItem('user'));
-    this.accountService.setCurrentUser(user);
+  setCurrentUser() {
+    const userJson = localStorage.getItem('user');
+    if (userJson) {
+      const user: User = JSON.parse(userJson);
+      this.accountService.setCurrentUser(user);
+
+      // Điều hướng về /members nếu đang ở trang gốc '/'
+      if (this.router.url === '/') {
+        this.router.navigateByUrl('/members');
+      }
+    }
   }
 }
