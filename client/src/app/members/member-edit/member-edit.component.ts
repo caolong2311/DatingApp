@@ -36,8 +36,9 @@ export class MemberEditComponent implements OnInit {
     })
   }
   updateMember() {
-    console.log(this.member);
+    this.memberSerice.updateMember(this.member).subscribe(() =>{
     this.toastr.success('Cập nhật hồ sơ thành công!', 'Thành công');
     this.editForm.reset(this.member);
+    });
   }
 }
