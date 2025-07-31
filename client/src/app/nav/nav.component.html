@@ -18,6 +18,7 @@
       </ul>
 
       <div class="dropdown" dropdown>
+        <img src="{{user.photoUrl}}" alt="{{user.username}}">
         <a class="dropdown-toggle text-light" dropdownToggle>Chào, {{ user.username | titlecase}}</a>
         <ul class="dropdown-menu mt-3" *dropdownMenu>
           <li><a routerLink="member/edit" class="dropdown-item">Thông tin</a></li>

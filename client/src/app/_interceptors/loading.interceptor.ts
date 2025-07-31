@@ -1,6 +1,5 @@
 import { inject } from '@angular/core';
 import { HttpInterceptorFn } from '@angular/common/http';
- // cập nhật đúng path
 import { delay, finalize } from 'rxjs';
 import { BusyService } from '../_services/busy.service';
 

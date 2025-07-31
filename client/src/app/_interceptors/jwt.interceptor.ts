@@ -5,8 +5,6 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const user = userString ? JSON.parse(userString) : null;
   const token = user?.token;
 
-  console.log('JWT Interceptor - Token:', token);
-
   if (token) {
     const cloned = req.clone({
       setHeaders: {

@@ -1,0 +1,26 @@
+img.img-thumbnial{
+    height: 100px;
+    min-width: 100px !important;
+    margin-bottom: 2px;
+}
+.nv-file-over{
+    border: dotted 3px red;
+}
+input[type=file]{
+    color: transparent;
+}
+.photo-grid-scroll {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.photo-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc(100% / 6); 
+  gap: 1rem;
+}
+
+.photo-card {
+  flex: 0 0 auto;
+}

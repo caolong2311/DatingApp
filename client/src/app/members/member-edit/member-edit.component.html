@@ -1,6 +1,6 @@
 <div class="row" *ngIf="member">
     <div class="col-4">
-        <h1>Hồ sơ của bạn</h1>
+        <!-- <h1>Hồ sơ của bạn</h1> -->
     </div>
     <div class="col-8">
         <div class="alert alert-info" *ngIf="editForm.dirty">
@@ -38,7 +38,7 @@
     </div>
     <div class="col-8">
         <tabset class="member-tabset">
-            <tab heading="Thông tin {{member.knownAs}}">
+            <tab heading="Thông tin cá nhân">
                 <form #editForm="ngForm" id="editForm" (ngSubmit)="updateMember()">
                     <h4>Mô tả</h4>
                     <textarea class="form-control" [(ngModel)]="member.introduction" name="introduction" rows="5"></textarea>
@@ -57,7 +57,7 @@
 
             </tab>
             <tab heading="Chỉnh sửa ảnh">
-                <p>Chỉnh ảnh ở đây</p>
+                <app-photo-editor [member] = "member"></app-photo-editor>
             </tab>
 
         </tabset>

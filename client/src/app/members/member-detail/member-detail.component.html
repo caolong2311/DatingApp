@@ -42,10 +42,18 @@
                 <p>{{member.interests}}</p>
             </tab>
             <tab heading="Ảnh">
-                <ng-image-slider [images]="imageObject" [showArrow]="true" [infinite]="true" [imageSize]="'contain'"
-                    [slideImage]="1" [showThumbImage]="true" [thumbnailSize]="'small'" [imagePopup]="true"
-                    [autoSlide]="false" [arrowKeyMove]="true" [showImage]="true" [thumbnailHeight]="70"
-                    [thumbnailWidth]="70" [imageHeight]="400"></ng-image-slider>
+                <div class="image-container">
+                    <div class="image-grid">
+                        <div class="image-item" *ngFor="let photo of member?.photos">
+                            <img [src]="photo.url" (click)="openImage(photo.url)" alt="photo" />
+                        </div>
+                    </div>
+                </div>
+
+          
+                <div class="overlay" *ngIf="selectedImage" (click)="closeImage()">
+                    <img [src]="selectedImage" class="overlay-img" />
+                </div>
             </tab>
 
 
