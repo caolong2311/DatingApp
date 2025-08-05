@@ -28,10 +28,13 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 
-app.UseCors(x => x.AllowAnyHeader()
+app.UseCors(x => x
+    .AllowAnyHeader()
     .AllowAnyMethod()
     .AllowCredentials()
-    .WithOrigins("https://localhost:4200"));
+    .WithOrigins("https://localhost:4200")
+    .WithExposedHeaders("Pagination"));
+
 app.UseAuthentication();
 app.UseAuthorization();
 

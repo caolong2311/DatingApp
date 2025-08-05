@@ -3,23 +3,32 @@ import { Member } from '../../_models/member';
 import { MembersService } from '../../_services/members.service';
 import { CommonModule } from '@angular/common';
 import { MemberCardComponent } from "../member-card/member-card.component";
+import { Pagination } from '../../_models/pagination';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 @Component({
   selector: 'app-member-list',
   standalone: true,
-  imports: [CommonModule, MemberCardComponent],
+  imports: [CommonModule, MemberCardComponent, PaginationModule],
   templateUrl: './member-list.component.html',
   styleUrl: './member-list.component.css'
 })
-export class MemberListComponent implements OnInit{
+export class MemberListComponent implements OnInit {
   members: Member[];
-  constructor(private memberService: MembersService){}
-  ngOnInit(): void{
+  pagination: Pagination;
+  pageNumber = 1;
+  pageSize = 5;
+  constructor(private memberService: MembersService) { }
+  ngOnInit(): void {
     this.loadMember();
   }
-  loadMember(){
-    this.memberService.getMembers().subscribe(members =>{
-      this.members = members;
-
+  loadMember() {
+    this.memberService.getMembers(this.pageNumber, this.pageSize).subscribe(response => {
+      this.members = response.result;
+      this.pagination = response.pagination
     })
+  }
+  pageChanged(event: any) {
+    this.pageNumber = event.page;
+    this.loadMember();
   }
 }

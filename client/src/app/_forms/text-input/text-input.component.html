@@ -1,0 +1,24 @@
+<div class="mb-3">
+  <input
+    [type]="type"
+    class="form-control"
+    [ngClass]="{ 'is-invalid': ngControl.invalid && (ngControl.touched || ngControl.dirty) }"
+    [formControl]="ngControl.control"
+    [placeholder]="label"
+    (blur)="onTouched()"
+    (input)="onChange($event.target.value)"
+  />
+
+  <div *ngIf="ngControl.errors?.required && (ngControl.touched || ngControl.dirty)" class="invalid-feedback">
+    Vui lòng nhập {{ label }}
+  </div>
+  <div *ngIf="ngControl.errors?.minlength && (ngControl.touched || ngControl.dirty)" class="invalid-feedback">
+    {{ label }} phải có ít nhất {{ ngControl.errors.minlength.requiredLength }} ký tự.
+  </div>
+  <div *ngIf="ngControl.errors?.maxlength && (ngControl.touched || ngControl.dirty)" class="invalid-feedback">
+    {{ label }} không được vượt quá {{ ngControl.errors.maxlength.requiredLength }} ký tự.
+  </div>
+  <div *ngIf="ngControl.errors?.isMatching && (ngControl.touched || ngControl.dirty)" class="invalid-feedback">
+    Mật khẩu xác nhận không khớp.
+  </div>
+</div>
