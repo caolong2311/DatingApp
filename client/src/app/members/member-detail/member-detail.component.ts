@@ -2,9 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-
 import { Member } from '../../_models/member';
 import { MembersService } from '../../_services/members.service';
+
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/vi';
+
+dayjs.extend(relativeTime);
+dayjs.locale('vi');
 
 @Component({
   selector: 'app-member-detail',
@@ -41,5 +47,9 @@ export class MemberDetailComponent implements OnInit {
 
   closeImage() {
     this.selectedImage = null;
+  }
+
+  timeAgo(date: string | Date): string {
+    return dayjs(date).fromNow(); // Ví dụ: "3 giờ trước"
   }
 }
