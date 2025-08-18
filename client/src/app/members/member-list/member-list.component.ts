@@ -8,7 +8,6 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { UserParams } from '../../_models/userParams';
 import { User } from '../../_models/user';
 import { AccountService } from '../../_services/account.service';
-import { take } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 @Component({

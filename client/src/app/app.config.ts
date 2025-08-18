@@ -19,7 +19,11 @@ export const appConfig: ApplicationConfig = {
     ])),
     provideAnimations(),
     importProvidersFrom(FormsModule),
-    provideToastr(),
+    provideToastr({
+      positionClass: 'toast-bottom-right', 
+      timeOut: 2000,                                        
+      progressBar: true                    
+    }),
     importProvidersFrom(NgxSpinnerModule)
   ]
 };

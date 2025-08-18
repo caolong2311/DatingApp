@@ -41,7 +41,7 @@ export class MembersService {
     if (response) {
       return of(response)
     }
-    let params = this.getPanigationHeader(userParams.pageNumber, userParams.pageSize);
+    let params = this.getPaginationHeader(userParams.pageNumber, userParams.pageSize);
     params = params.append('minAge', userParams.minAge.toString());
     params = params.append('maxAge', userParams.maxAge.toString());
     params = params.append('gender', userParams.gender.toString());
@@ -51,6 +51,14 @@ export class MembersService {
         this.memberCache.set(Object.values(userParams).join('-'), response);
         return response;
       }))
+  }
+  addLike(username: string){
+    return this.http.post(this.baseUrl + 'likes/' + username, {})
+  }
+  getLikes(predicate: string, pageNumber, pageSize){
+    let params = this.getPaginationHeader(pageNumber, pageSize);
+    params = params.append('predicate', predicate);
+    return this.getPaginationResult<Partial<Member[]>>(this.baseUrl + 'likes',  params );
   }
   private getPaginationResult<T>(url, params) {
     const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>();
@@ -65,7 +73,7 @@ export class MembersService {
     );
   }
 
-  private getPanigationHeader(pageNumber: number, pageSize: number) {
+  private getPaginationHeader(pageNumber: number, pageSize: number) {
     let params = new HttpParams();
     params = params.append('pageNumber', pageNumber.toString());
     params = params.append('pageSize', pageSize.toString());
