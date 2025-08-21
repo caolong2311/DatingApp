@@ -1,0 +1,38 @@
+<div class="card">
+    <div class="card-body chat-container" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+        <div *ngIf="messages?.length === 0">
+
+        </div>
+
+        <ul class="chat">
+            <li *ngFor="let message of messages" [ngClass]="{
+      'my-message': message.senderUsername === currentUser?.username,
+      'other-message': message.senderUsername !== currentUser?.username
+    }">
+                <div class="chat-bubble">
+                    <p>{{message.content}}</p>
+                    <div class="chat-footer">
+                        <small class="text-muted">
+                            <span class="fa fa-clock-o"></span> {{timeAgo(message.messageSent)}}
+                        </small>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+
+    <div class="card-footer">
+        <form #messageForm="ngForm" (ngSubmit)="sendMessage()" autocomplete="off">
+            <div class="input-group">
+                <input name="messageContent" required [(ngModel)]="messageContent" type="text"
+                    class="form-control input-sm me-2" placeholder="Gõ tin nhắn vào đây">
+                <div class="input-group-append">
+                    <button [disabled]="!messageForm.valid || loading" class="btn btn-primary" type="submit">
+                        Gửi <i *ngIf="loading" class="fa fa-spinner fa-spin"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

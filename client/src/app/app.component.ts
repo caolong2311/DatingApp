@@ -6,6 +6,7 @@ import { NavComponent } from './nav/nav.component';
 import { AccountService } from './_services/account.service';
 import { User } from './_models/user';
 import { NgxSpinnerComponent } from "ngx-spinner";
+import { PresenceService } from './_services/presence.service';
 
 
 @Component({
@@ -18,7 +19,10 @@ import { NgxSpinnerComponent } from "ngx-spinner";
 export class AppComponent implements OnInit {
   title = 'Dating app';
   users: any;
-  constructor(private accountService: AccountService, private router: Router) { }
+  constructor(
+    private accountService: AccountService, 
+    private router: Router, 
+    private presence: PresenceService  ) { }
   ngOnInit() {
     this.setCurrentUser();
   }
@@ -27,8 +31,7 @@ export class AppComponent implements OnInit {
     if (userJson) {
       const user: User = JSON.parse(userJson);
       this.accountService.setCurrentUser(user);
-
-      // Điều hướng về /members nếu đang ở trang gốc '/'
+      this.presence.createHubConnection(user);
       if (this.router.url === '/') {
         this.router.navigateByUrl('/members');
       }

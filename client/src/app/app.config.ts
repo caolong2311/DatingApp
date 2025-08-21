@@ -8,7 +8,7 @@ import { provideToastr } from 'ngx-toastr';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { loadingInterceptor } from './_interceptors/loading.interceptor';
 import { jwtInterceptor } from './_interceptors/jwt.interceptor';
-
+import { CommonModule } from '@angular/common';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -19,10 +19,11 @@ export const appConfig: ApplicationConfig = {
     ])),
     provideAnimations(),
     importProvidersFrom(FormsModule),
+    importProvidersFrom(CommonModule),
     provideToastr({
-      positionClass: 'toast-bottom-right', 
-      timeOut: 2000,                                        
-      progressBar: true                    
+      positionClass: 'toast-bottom-right',
+      timeOut: 2000,
+      progressBar: true
     }),
     importProvidersFrom(NgxSpinnerModule)
   ]
