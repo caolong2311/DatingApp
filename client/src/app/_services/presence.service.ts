@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../_models/user';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +11,13 @@ import { User } from '../_models/user';
 export class PresenceService {
   hubUrl = environment.hubUrl;
   private hubConnection: HubConnection;
+  private onlineUsersSource = new BehaviorSubject<string[]>([]);
+  onlineUsers$ = this.onlineUsersSource.asObservable();
   constructor(private toastr: ToastrService) { }
 
   createHubConnection(user: User){
     this.hubConnection = new HubConnectionBuilder()
-    .withUrl(this.hubUrl + '/presence', {
+    .withUrl(this.hubUrl + 'presence', {
       accessTokenFactory: () => user.token
     })
     .withAutomaticReconnect()
@@ -23,13 +26,16 @@ export class PresenceService {
     .start()
     .catch(error => console.log(error));
     
-    this.hubConnection.on('Online', username => {
-      this.toastr.info(username + 'online');
-    })
+    // this.hubConnection.on('Online', username => {
+    //   this.toastr.info(username + 'online');
+    // })
 
-     this.hubConnection.on('Offline', username => {
-      this.toastr.warning(username + 'offline');
-    })
+    //  this.hubConnection.on('Offline', username => {
+    //   this.toastr.warning(username + 'offline');
+    // })
+    this.hubConnection.on('GetOnlinesUsers', (usernames: string[]) => {
+      this.onlineUsersSource.next(usernames)
+    });
   }
   stopHubConnection(){
     this.hubConnection.stop().catch(error => console.log(error));

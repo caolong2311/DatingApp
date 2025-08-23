@@ -1,16 +1,20 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { TabDirective, TabsetComponent, TabsModule } from 'ngx-bootstrap/tabs';
+
 import { Member } from '../../_models/member';
-import { MembersService } from '../../_services/members.service';
-import { MemberMessagesComponent } from "../member-messages/member-messages.component";
+import { MemberMessagesComponent } from '../member-messages/member-messages.component';
 
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/vi';
-import { Message } from '../../_models/message';
+
 import { MessageService } from '../../_services/message.service';
+import { PresenceService } from '../../_services/presence.service';
+import { AccountService } from '../../_services/account.service';
+import { User } from '../../_models/user';
+import { take } from 'rxjs';
 
 dayjs.extend(relativeTime);
 dayjs.locale('vi');
@@ -22,28 +26,38 @@ dayjs.locale('vi');
   templateUrl: './member-detail.component.html',
   styleUrls: ['./member-detail.component.css']
 })
-export class MemberDetailComponent implements OnInit {
+export class MemberDetailComponent implements OnInit, OnDestroy {
   @ViewChild('memberTabs', { static: true }) memberTabs: TabsetComponent;
+
   member: Member | null = null;
   selectedImage: string | null = null;
-  activeTab: TabDirective;
-  messages: Message[] = [];
+  activeTab: TabDirective | null = null;
+  user: User | null = null;
+
   constructor(
-    private memberService: MembersService,
+    public presence: PresenceService,
     private route: ActivatedRoute,
-    private messageService: MessageService
-  ) { }
+    private messageService: MessageService,
+    private accountService: AccountService
+  ) {
+    this.accountService.currentUser$.pipe(take(1)).subscribe(u => (this.user = u));
+  }
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {
-      this.member = data.member;
-    })
+      this.member = data['member'];
+    });
+
+    // Chọn tab theo query param nếu có, mặc định tab 0
     this.route.queryParams.subscribe(params => {
-      params.tab ? this.selectTab(params.tab) : this.selectTab(0);
-    })
+      const tabIndex = Number(params['tab']);
+      Number.isInteger(tabIndex) ? this.selectTab(tabIndex) : this.selectTab(0);
+    });
   }
 
-
+  ngOnDestroy(): void {
+    this.messageService.stopHubConnection();
+  }
 
   openImage(url: string) {
     this.selectedImage = url;
@@ -56,18 +70,20 @@ export class MemberDetailComponent implements OnInit {
   timeAgo(date: string | Date): string {
     return dayjs(date).fromNow();
   }
-  loadMessages() {
-    this.messageService.getMessageThread(this.member.username).subscribe(massages => {
-      this.messages = massages;
-    })
-  }
+
   selectTab(tabId: number) {
-    this.memberTabs.tabs[tabId].active = true;
+    if (this.memberTabs && this.memberTabs.tabs[tabId]) {
+      this.memberTabs.tabs[tabId].active = true;
+    }
   }
-  onTabActivated(data: TabDirective) {
-    this.activeTab = data;
-    if (this.activeTab.heading === 'Tin nhắn' && this.messages.length === 0) {
-      this.loadMessages();
+
+
+  onTabActivated(tab: TabDirective) {
+    this.activeTab = tab;
+    if (tab.heading === 'Tin nhắn' && this.user && this.member?.username) {
+      this.messageService.createHubConnection(this.user, this.member.username);
+    } else {
+      this.messageService.stopHubConnection();
     }
   }
 }

@@ -11,6 +11,7 @@ import { User } from '../../_models/user';
 
 dayjs.extend(relativeTime);
 dayjs.locale('vi');
+
 @Component({
   selector: 'app-member-messages',
   standalone: true,
@@ -19,29 +20,54 @@ dayjs.locale('vi');
   styleUrl: './member-messages.component.css'
 })
 export class MemberMessagesComponent implements OnInit {
-  @ViewChild('messageForm') messageForm: NgForm;
-  @Input() messages: Message[];
+  @ViewChild('messageForm', { static: false }) messageForm?: NgForm;
+  @ViewChild('scrollMe') private scrollContainer: any;
   @Input() username: string;
+
+  messages: Message[] = [];
   currentUser: User;
   loading = false;
-  messageContent: string;
-  constructor(private messageService: MessageService,
-    private accountService: AccountService) {
+  messageContent: string = '';
+
+  constructor(
+    public messageService: MessageService,
+    private accountService: AccountService
+  ) {
     this.accountService.currentUser$.subscribe(user => {
       this.currentUser = user;
     });
   }
+
   ngOnInit(): void {
+    if (this.currentUser && this.username) {
+      this.messageService.createHubConnection(this.currentUser, this.username);
+    }
 
+    this.messageService.messageThread$.subscribe(messages => {
+      this.messages = messages;
+      this.scrollToBottom();
+    });
   }
-  sendMessage() {
-    this.messageService.sendMessage(this.username, this.messageContent).subscribe(message => {
-      this.messages.push(message);
+
+
+  async sendMessage() {
+    this.loading = true;
+    try {
+      await this.messageService.sendMessage(this.username, this.messageContent);
       this.messageForm.reset();
-    })
-
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.loading = false;
+    }
   }
+
   timeAgo(date: string | Date): string {
     return dayjs(date).fromNow();
+  }
+  scrollToBottom(): void {
+    try {
+      this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+    } catch (err) { }
   }
 }
